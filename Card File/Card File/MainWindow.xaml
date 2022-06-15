@@ -1,0 +1,58 @@
+﻿<Window x:Class="Card_File.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Card_File"
+        mc:Ignorable="d"
+        Title="PatienList" ResizeMode="CanMinimize" Height="450" Width="800" Loaded="Window_Loaded" Icon="/box.ico">
+    <Window.Resources>
+        <CollectionViewSource x:Key="patientViewSource"/>
+    </Window.Resources>
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="patientDataGrid" AutoGenerateColumns="False" CanUserAddRows="false"
+          EnableRowVirtualization="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+          ItemsSource="{Binding Source={StaticResource patientViewSource}}" 
+          Grid.Column="0" Grid.Row="0" Height="300" VerticalAlignment="Top" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding patientID}"
+                            Header="ID" Width="30"
+                            IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding patientName}" Header="Name" 
+                            Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding patientSurname}" Header="Surname" 
+                            Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding date, StringFormat={}{0:dd/MM/yyyy}}" Header="Birthdate" 
+                            Width="*" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Delete" Width="75">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="X" Click="Delete_Patient" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBox x:Name="SearchText" FontFamily="Arial" FontSize="20" VerticalAlignment="Bottom" Margin="50,65,300,65" TextAlignment="Center" Grid.Column="0"/>
+        <Button x:Name="SearchButt" FontFamily="Arial" FontSize="20" Content="Search" VerticalAlignment="Bottom" Margin="250,0,70,45" Height="33" Click="Search_Patient"/>
+        <Label x:Name="label" Grid.Column="2" Content="Name:" HorizontalAlignment="Left" Margin="39,20,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="NameTxb" Text="{Binding ElementName=patientDataGrid ,Path=SelectedItem.patientName,Mode=OneWay}" Grid.Column ="2" VerticalAlignment="Top" Margin="112,25,60,0"></TextBox>
+        <Label x:Name="label1" Grid.Column="2" Content="Surname:" HorizontalAlignment="Left" Margin="39,100,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="SurnameTxb" Text="{Binding ElementName=patientDataGrid ,Path=SelectedItem.patientSurname,Mode=OneWay}" Grid.Column ="2" VerticalAlignment="Top" Margin="112,105,60,0"></TextBox>
+        <Label x:Name="label2" Grid.Column="2" Content="Birthdate:" HorizontalAlignment="Left" Margin="33,157,0,0" VerticalAlignment="Top"/>
+
+        <Button x:Name="EditButt" Click="Editate_Patient" Grid.Column="2" FontFamily="Arial" FontSize="25" Content="Edit" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,10" Width="121"></Button>
+        <Button x:Name="AddButt" Click="Add_Patient" Grid.Column="2" FontFamily="Arial" FontSize="25" Content="Add" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="150,0,0,10" Width="121"></Button>
+        <DatePicker x:Name="Calendare" VerticalAlignment="Center" Margin="120, -90, 75,0" Grid.Column="1" SelectedDate="{Binding ElementName=patientDataGrid, Path=SelectedItem.date, Mode=OneWay}" DisplayDate="{Binding Path=SelectedDate, RelativeSource={RelativeSource Self}, Mode=OneWay}" />
+        <ComboBox x:Name="ChooseCMB" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="120" Margin="60,0,0,25" SelectedIndex="0">
+            <ComboBoxItem Content="Name" Name="name"></ComboBoxItem>
+            <ComboBoxItem Content="Surname" Name="surname"></ComboBoxItem>
+        </ComboBox>
+    </Grid>
+</Window>
